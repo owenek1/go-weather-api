@@ -2,9 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
+)
+
+const (
+	apiURL = ""
 )
 
 type apiConfigData struct {
@@ -40,6 +45,17 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello from go! \n"))
 }
 
+func buildApiQuery(appid string, city string) (query string) {
+	var c string = "https://api.openweathermap.org/data/2.5/weather"
+
+	c += "?appid=" + appid
+	c += "&q=" + city
+
+	fmt.Println(c)
+
+	return
+}
+
 func query(city string) (weatherData, error) {
 	apiConfigData, err := loadApiConfig(".apiConfig")
 
@@ -47,7 +63,7 @@ func query(city string) (weatherData, error) {
 		return weatherData{}, err
 	}
 
-	resp, err := http.Get("https://api.openweathermap.org/data/2.5/weather?appid=" + apiConfigData.OpenWeatherMapApiKey + "&q=" + city)
+	resp, err := http.Get(buildApiQuery(apiConfigData.OpenWeatherMapApiKey, city))
 
 	if err != nil {
 		return weatherData{}, err
