@@ -41,10 +41,6 @@ func loadApiConfig(filename string) (apiConfigData, error) {
 	return c, nil
 }
 
-func hello(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello from go! \n"))
-}
-
 func buildApiQuery(appid string, city string) (query string) {
 	var c string = "https://api.openweathermap.org/data/2.5/weather"
 
@@ -80,8 +76,12 @@ func query(city string) (weatherData, error) {
 
 }
 
+func index(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Weather API in GOlang \n"))
+}
+
 func main() {
-	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/", index)
 
 	http.HandleFunc("/weather/",
 		func(w http.ResponseWriter, r *http.Request) {
